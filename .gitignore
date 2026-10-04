@@ -1,0 +1,24 @@
+# Secrets (keys live in environment variables, never in files)
+.env
+.env.*
+*.key
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Local data (e.g. the Kaggle Fragrantica dataset)
+data/
+
+# Impeccable / editor / OS
+.impeccable/
+.claude/
+.vscode/
+.idea/
+.DS_Store
+*.log

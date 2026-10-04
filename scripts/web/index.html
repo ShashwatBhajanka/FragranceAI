@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FragranceAI</title>
+<meta name="description" content="Ask about any perfume or describe what you want. Answers come from live fragrance data.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<!--
+THESIS: A quiet reading room for scent. The text is the product; the ground is a plain, softly lit field of green-black.
+OWN-WORLD: Vetiver green-black ground (pale sage in light mode), one muted rose accent, Bricolage Grotesque for the voice, Hanken Grotesk for reading. One 10px radius.
+STORY: The buyer asks in plain words, watches the lookup progress, reads an answer, and can click straight through to where each fact came from.
+FIRST VIEWPORT: Full-height reading column centered on a plain tonal ground; greeting, four starter questions, composer pinned to the bottom.
+FORM: Operate-mode chat, tentative build. Seed: none (user-specified brief).
+FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
+-->
+<div class="bg" aria-hidden="true"></div>
+<div class="shell">
+  <header class="top">
+    <a class="brand" href="/" aria-label="FragranceAI home">FragranceAI</a>
+    <button type="button" class="ghost" id="new-chat"><i class="ph ph-plus" aria-hidden="true"></i><span>New chat</span></button>
+  </header>
+
+  <div id="notice" class="notice" role="status" hidden></div>
+
+  <main id="scroll" class="scroll">
+    <div id="log" class="log">
+      <section id="empty" class="empty">
+        <h1>What are you looking for?</h1>
+        <p>Ask about any perfume, or describe the occasion, the weather and what you like to smell.</p>
+        <ul class="starters">
+          <li><button type="button" data-q="A long-lasting citrus perfume for a hot day">A long-lasting citrus perfume for a hot day</button></li>
+          <li><button type="button" data-q="How long does Creed Aventus last, and how far does it project?">How long does Creed Aventus last, and how far does it project?</button></li>
+          <li><button type="button" data-q="Compare Bleu de Chanel and Dior Sauvage for office wear">Compare Bleu de Chanel and Dior Sauvage for office wear</button></li>
+          <li><button type="button" data-q="A warm vanilla scent for winter evenings">A warm vanilla scent for winter evenings</button></li>
+        </ul>
+      </section>
+    </div>
+  </main>
+
+  <form id="composer" class="composer" autocomplete="off">
+    <label for="input" class="sr-only">Your message</label>
+    <div class="field">
+      <textarea id="input" rows="1" maxlength="4000" placeholder="Ask about a perfume or describe what you want"></textarea>
+      <button type="submit" id="send" class="send" disabled><span>Send</span><i class="ph ph-arrow-up" aria-hidden="true"></i></button>
+    </div>
+    <p class="fine">Facts come from live fragrance data. Prices vary by seller, so check before you buy.</p>
+  </form>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
