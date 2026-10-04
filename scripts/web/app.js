@@ -113,13 +113,28 @@
     toBottom(true);
   }
 
+  const LOADERS =
+    '<svg class="loader l-spray" viewBox="0 0 74 44" aria-hidden="true">' +
+      '<g class="btn"><rect x="15" y="3" width="10" height="4" rx="1.5" fill="currentColor"/></g>' +
+      '<rect x="18" y="7" width="4" height="6" fill="currentColor" opacity=".6"/>' +
+      '<path d="M26 12h6v3h-6z" fill="currentColor"/>' +
+      '<rect x="6" y="14" width="24" height="26" rx="6" fill="none" stroke="currentColor" stroke-width="2"/>' +
+      '<path d="M6 28c4-2.500 7 2.500 12 0s8-2 12 0v6a6 6 0 0 1-6 6H12a6 6 0 0 1-6-6z" fill="currentColor" opacity=".25"/>' +
+      '<circle class="mist m1" cx="36" cy="13" r="2.600"/><circle class="mist m2" cx="36" cy="13" r="2"/>' +
+      '<circle class="mist m3" cx="36" cy="13" r="3"/><circle class="mist m4" cx="36" cy="13" r="1.800"/>' +
+      '<circle class="mist m5" cx="36" cy="13" r="2.300"/></svg>' +
+    '<svg class="loader l-notes" viewBox="0 0 66 44" aria-hidden="true">' +
+      '<circle class="n n1" cx="14" cy="30" r="4"/><circle class="n n2" cx="33" cy="30" r="6"/><circle class="n n3" cx="52" cy="30" r="8"/></svg>' +
+    '<svg class="loader l-ink" viewBox="0 0 74 44" aria-hidden="true">' +
+      '<path class="stroke" d="M4 30c8-18 14-18 12-4s6 12 12-2 12-14 8-2 8 8 14-6 10-6 8-2"/>' +
+      '<path class="stroke s2" d="M8 38c14-4 30-4 58-2"/></svg>';
+
   function addThinking() {
     const m = el("article", "msg bot");
     m.setAttribute("aria-busy", "true");
     m.innerHTML =
-      '<div class="thinking" role="status" aria-live="polite">' +
-      '<div class="wisps" aria-hidden="true"><span></span><span></span><span></span></div>' +
-      '<div><span class="text">Thinking it through</span><span class="slow" hidden>This one needs a few lookups, hang tight.</span></div></div>';
+      '<div class="thinking" role="status" aria-live="polite">' + LOADERS +
+      '<div><span class="text">Choosing the right notes</span><span class="slow" hidden>This one needs a few lookups, hang tight.</span></div></div>';
     log.appendChild(m);
     toBottom(true);
     const text = m.querySelector(".text"), slow = m.querySelector(".slow");
@@ -291,6 +306,31 @@
     sessionId = newId();
     location.reload();
   });
+
+  /* ---------- style picker: paper + loading animation, remembered per browser ---------- */
+  const root = document.documentElement;
+  const pop = $("#style-pop"), styleBtn = $("#style-btn");
+  function syncChips() {
+    pop.querySelectorAll(".chips").forEach((g) => {
+      const cur = root.dataset[g.dataset.pref];
+      g.querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.v === cur)));
+    });
+  }
+  pop.querySelectorAll(".chips").forEach((g) => g.addEventListener("click", (e) => {
+    const b = e.target.closest("button");
+    if (!b) return;
+    root.dataset[g.dataset.pref] = b.dataset.v;
+    try { localStorage.setItem("frag." + g.dataset.pref, b.dataset.v); } catch (_) {}
+    syncChips();
+  }));
+  function setPop(open) {
+    pop.hidden = !open;
+    styleBtn.setAttribute("aria-expanded", String(open));
+  }
+  styleBtn.addEventListener("click", (e) => { e.stopPropagation(); setPop(pop.hidden); });
+  document.addEventListener("click", (e) => { if (!pop.hidden && !pop.contains(e.target)) setPop(false); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !pop.hidden) { setPop(false); styleBtn.focus(); } });
+  syncChips();
 
   updateSend();
   loadStatus();
